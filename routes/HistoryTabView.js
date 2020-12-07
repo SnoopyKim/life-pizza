@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { isEmptyObject } from './../utils/check';
-import {
-    getLottoData,
-    getCurrentRound,
-    getAllLottoDatas,
-} from './../modules/api';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { isEmptyArray } from './../utils/check';
+import { getAllLottoDatas } from './../modules/api';
 
 export default function HistoryTabView() {
-    const [recentData, setRecentData] = useState({});
-    if (isEmptyObject(recentData)) {
-        const round = getCurrentRound();
-        getLottoData(round).then((rst) => setRecentData(rst.data));
-        console.log('Call data start', new Date().toDateString());
-        getAllLottoDatas().then((rst) =>
-            console.log('Get data', rst.length, new Date().toDateString())
-        );
+    const [data, setData] = useState([]);
+    if (isEmptyArray(data)) {
+        getAllLottoDatas().then((rst) => setData(rst));
     }
 
     return (
         <View>
-            {isEmptyObject(recentData) ? (
+            {isEmptyArray(data) ? (
                 <Text>Data Loading...</Text>
             ) : (
-                <View>
-                    <Text>{recentData.drwtNo1}</Text>
-                    <Text>{recentData.drwtNo2}</Text>
-                    <Text>{recentData.drwtNo3}</Text>
-                    <Text>{recentData.drwtNo4}</Text>
-                    <Text>{recentData.drwtNo5}</Text>
-                    <Text>{recentData.drwtNo6}</Text>
-                    <Text>{recentData.bnusNo}</Text>
-                </View>
+                <ScrollView>
+                    {data.map((val) => (
+                        <View key={val.date}>
+                            <Text>
+                                {val.round}회 결과 ({val.date})
+                            </Text>
+                            <Text>
+                                {val.no1} {val.no2} {val.no3} {val.no4}{' '}
+                                {val.no5} {val.no6} {val.bno}
+                            </Text>
+                        </View>
+                    ))}
+                </ScrollView>
             )}
         </View>
     );

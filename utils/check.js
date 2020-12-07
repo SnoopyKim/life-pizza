@@ -3,5 +3,5 @@ export const isEmptyObject = (obj) => {
 };
 
 export const isEmptyArray = (arr) => {
-    return Array.isArray(arr) && arr.length;
+    return Array.isArray(arr) && arr.length === 0;
 };

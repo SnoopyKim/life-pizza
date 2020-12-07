@@ -5,6 +5,7 @@ const WEEK_MILLISECOND = 1000 * 60 * 60 * 24 * 7;
 const UPDATE_TIME = 'T21:00:00';
 const FIRST_ROUND_TIME = '2002-12-07' + UPDATE_TIME;
 
+// 날짜 비교를 통한 최신 회차 계산
 export const getCurrentRound = () => {
     const now = new Date();
     const first = new Date(FIRST_ROUND_TIME);
@@ -13,6 +14,7 @@ export const getCurrentRound = () => {
     return Math.floor(diffWeek);
 };
 
+// 한 회차 결과 쿼리
 export const getLottoData = async (round) => {
     return await Axios.get('http://www.dhlottery.co.kr/common.do', {
         params: {
@@ -22,6 +24,7 @@ export const getLottoData = async (round) => {
     });
 };
 
+// response가 html형식이므로 cheerio를 사용해 파싱
 export const getAllLottoDatas = async () => {
     const result = [];
     await Axios.get('https://dhlottery.co.kr/gameResult.do', {
