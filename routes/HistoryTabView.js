@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { isEmptyArray } from './../utils/check';
 import { getAllLottoDatas } from './../modules/api';
+import LottoCard from './../components/LottoCard';
 
 export default function HistoryTabView() {
     const [data, setData] = useState([]);
@@ -16,15 +17,7 @@ export default function HistoryTabView() {
             ) : (
                 <ScrollView>
                     {data.map((val) => (
-                        <View key={val.date}>
-                            <Text>
-                                {val.round}회 결과 ({val.date})
-                            </Text>
-                            <Text>
-                                {val.no1} {val.no2} {val.no3} {val.no4}{' '}
-                                {val.no5} {val.no6} {val.bno}
-                            </Text>
-                        </View>
+                        <LottoCard data={val} />
                     ))}
                 </ScrollView>
             )}
