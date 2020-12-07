@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Axios from 'axios';
 import { isEmptyObject } from './../utils/check';
-
-const getLottoData = async (round) => {
-    return await Axios.get('http://www.dhlottery.co.kr/common.do', {
-        params: {
-            method: 'getLottoNumber',
-            drwNo: round,
-        },
-    });
-};
+import {
+    getLottoData,
+    getCurrentRound,
+    getAllLottoDatas,
+} from './../modules/api';
 
 export default function HistoryTabView() {
     const [recentData, setRecentData] = useState({});
     if (isEmptyObject(recentData)) {
-        getLottoData(939).then((rst) => setRecentData(rst.data));
+        const round = getCurrentRound();
+        getLottoData(round).then((rst) => setRecentData(rst.data));
+        console.log('Call data start', new Date().toDateString());
+        getAllLottoDatas().then((rst) =>
+            console.log('Get data', rst.length, new Date().toDateString())
+        );
     }
+
     return (
         <View>
             {isEmptyObject(recentData) ? (
