@@ -31,7 +31,7 @@ export const getAllLottoDatas = async () => {
         params: {
             method: 'allWinExel',
             drwNoStart: 1,
-            drwNoEnd: getCurrentRound(),
+            drwNoEnd: 10,
         },
         responseType: 'text',
     }).then((response) => {

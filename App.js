@@ -1,22 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, Image } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+    createStackNavigator,
+    TransitionPresets,
+} from '@react-navigation/stack';
 import MainScreen from './routes/MainScreen';
 import WebviewScreen from './routes/WebviewScreen';
+import { Image, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import { THEME_COLORS } from './utils/color';
+import webIcon from './images/web.png';
 
 const Stack = createStackNavigator();
 
 const App = () => {
+    StatusBar.setBackgroundColor(THEME_COLORS.MIDNIGHT_DARK, true);
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Main" component={MainScreen} />
-                <Stack.Screen name="Webview" component={WebviewScreen} />
+            <Stack.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
+                        height: 50,
+                    },
+                    headerTintColor: THEME_COLORS.GRAY_100,
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: {
+                        fontSize: 22,
+                        letterSpacing: 1,
+                        fontWeight: 'bold',
+                    },
+                    ...TransitionPresets.SlideFromRightIOS, // 화면 이동 시 슬라이드 설정 (iOS만 되는 것 아님!)
+                }}>
+                <Stack.Screen
+                    name="Main"
+                    component={MainScreen}
+                    options={({ navigation, route }) => ({
+                        title: '인생피자',
+                        headerRight: () => (
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Webview')}>
+                                <Image
+                                    source={webIcon}
+                                    style={styles.navIcon}
+                                />
+                            </TouchableOpacity>
+                        ),
+                    })}
+                />
+                <Stack.Screen
+                    name="Webview"
+                    component={WebviewScreen}
+                    options={{ title: '동행복권' }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+    navIcon: {
+        marginEnd: 10,
+        tintColor: THEME_COLORS.GRAY_100,
+        width: 30,
+        height: 30,
+    },
+});
