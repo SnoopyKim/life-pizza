@@ -17,7 +17,7 @@ export default function HistoryTabView() {
             ) : (
                 <ScrollView>
                     {data.map((val) => (
-                        <LottoCard data={val} />
+                        <LottoCard key={val.round} data={val} />
                     ))}
                 </ScrollView>
             )}
