@@ -6,7 +6,13 @@ import {
 } from '@react-navigation/stack';
 import MainScreen from './routes/MainScreen';
 import WebviewScreen from './routes/WebviewScreen';
-import { Image, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+    Image,
+    StatusBar,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { THEME_COLORS } from './style/color';
 import webIcon from './images/web.png';
 
@@ -43,7 +49,7 @@ const App = () => {
                 <Stack.Screen
                     name="Webview"
                     component={WebviewScreen}
-                    options={{ title: '동행복권' }}
+                    options={{ title: '동행복권', header: () => <View /> }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
