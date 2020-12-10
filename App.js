@@ -7,7 +7,7 @@ import {
 import MainScreen from './routes/MainScreen';
 import WebviewScreen from './routes/WebviewScreen';
 import { Image, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
-import { THEME_COLORS } from './utils/color';
+import { THEME_COLORS } from './style/color';
 import webIcon from './images/web.png';
 
 const Stack = createStackNavigator();
@@ -18,17 +18,10 @@ const App = () => {
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{
-                    headerStyle: {
-                        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
-                        height: 50,
-                    },
+                    headerStyle: styles.header,
                     headerTintColor: THEME_COLORS.GRAY_100,
                     headerTitleAlign: 'center',
-                    headerTitleStyle: {
-                        fontSize: 22,
-                        letterSpacing: 1,
-                        fontWeight: 'bold',
-                    },
+                    headerTitleStyle: styles.headerTitle,
                     ...TransitionPresets.SlideFromRightIOS, // 화면 이동 시 슬라이드 설정 (iOS만 되는 것 아님!)
                 }}>
                 <Stack.Screen
@@ -60,10 +53,19 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
+    header: {
+        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
+        height: 50,
+    },
+    headerTitle: {
+        fontSize: 22,
+        letterSpacing: 1,
+        fontWeight: 'bold',
+    },
     navIcon: {
-        marginEnd: 10,
+        marginEnd: 20,
         tintColor: THEME_COLORS.GRAY_100,
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
     },
 });

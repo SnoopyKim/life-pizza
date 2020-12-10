@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { getBallColor } from '../utils/color';
+import { getBallColor } from '../style/color';
 
 export default function Ball({ number, ...props }) {
     return (
