@@ -19,7 +19,7 @@ import webIcon from './images/web.png';
 const Stack = createStackNavigator();
 
 const App = () => {
-    StatusBar.setBackgroundColor(THEME_COLORS.MIDNIGHT_DARK, true);
+    StatusBar.setBackgroundColor(THEME_COLORS.MIDNIGHT_BLACK, true);
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -60,7 +60,7 @@ export default App;
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
+        backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
         height: 50,
     },
     headerTitle: {

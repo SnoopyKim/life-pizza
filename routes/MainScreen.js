@@ -68,6 +68,6 @@ export default function MainScreen() {
 const styles = StyleSheet.create({
     tabBar: {
         height: 50,
-        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
+        backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
     },
 });

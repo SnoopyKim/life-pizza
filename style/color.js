@@ -1,5 +1,5 @@
 export const THEME_COLORS = {
-    MIDNIGHT_DARK: '#171828',
+    MIDNIGHT_BLACK: '#171828',
     GRAY_50: '#F7F8F9',
     GRAY_100: '#E8EBED',
     GRAY_200: '#C9CDD2',

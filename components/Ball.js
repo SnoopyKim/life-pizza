@@ -4,12 +4,7 @@ import { getBallColor } from '../style/color';
 
 export default function Ball({ number, ...props }) {
     return (
-        <View
-            style={[
-                { backgroundColor: getBallColor(number) },
-                styles.box,
-                props.style,
-            ]}>
+        <View style={[{ backgroundColor: getBallColor(number) }, styles.box, props.style]}>
             <Text style={styles.number}>{number}</Text>
         </View>
     );

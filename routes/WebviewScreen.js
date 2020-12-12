@@ -24,7 +24,6 @@ export default function WebviewScreen({ navigation }) {
         const handler = BackHandler.addEventListener('hardwareBackPress', onAndroidBackPress);
         return () => {
             handler.remove();
-            // BackHandler.removeEventListener('hardwareBackPress', onAndroidBackPress);
         };
     }, [onAndroidBackPress]);
 
@@ -32,9 +31,7 @@ export default function WebviewScreen({ navigation }) {
         <View style={styles.screen}>
             <WebView
                 ref={wvRef}
-                source={{
-                    uri: WEB_URL,
-                }}
+                source={{ uri: WEB_URL }}
                 onNavigationStateChange={(navState) => setCanGoBack(navState.canGoBack)}
             />
             {/* 웹뷰 컨트롤러 */}
@@ -81,7 +78,7 @@ const styles = StyleSheet.create({
     },
     controllerBox: {
         height: 50,
-        backgroundColor: THEME_COLORS.MIDNIGHT_DARK,
+        backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
         flexDirection: 'row',
     },
     button: {
