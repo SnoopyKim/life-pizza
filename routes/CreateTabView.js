@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Ball from '../components/Ball';
 import { createNumberSet } from '../utils/number';
-import { isEmptyArray } from './../utils/check';
-import { THEME_COLORS } from './../style/color';
+import { isEmptyArray } from '../utils/check';
+import { THEME_COLORS } from '../style/color';
 
-export default function NumberTabView() {
+export default function CreateTabView() {
     const [numbers, setNumbers] = useState([]);
     const translationY = new Array(6).fill(0).map(() => new Animated.Value(0));
     const ballTranslateY = translationY.map((val, idx) =>
@@ -23,6 +23,7 @@ export default function NumberTabView() {
                     toValue: 1,
                     duration: 1500,
                     easing: Easing.bounce,
+                    delay: 100,
                     useNativeDriver: true,
                 });
             });

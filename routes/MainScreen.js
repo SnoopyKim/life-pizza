@@ -2,9 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HistoryTabView from './HistoryTabView';
-import NumberTabView from './NumberTabView';
+import CreateTabView from './CreateTabView';
+import PickTabView from './PickTabView';
 import listIcon from '../images/format-list-text.png';
 import ballIcon from '../images/billiards.png';
+import pointIcon from '../images/hand-pointing-left.png';
 import { THEME_COLORS } from '../style/color';
 import { getTabBarIconStyle, getTabBarLabelStyle } from '../style';
 
@@ -25,18 +27,28 @@ export default function MainScreen() {
         );
     };
 
-    const renderNumberTabIcon = ({ focused, color, size }) => {
+    const renderCreateTabIcon = ({ focused, color, size }) => {
         return <Image source={ballIcon} style={getTabBarIconStyle(focused)} />;
     };
 
-    const renderNumberLabel = ({ focused, color, position }) => {
-        return focused ? (
-            <Text source={listIcon} style={getTabBarLabelStyle()}>
-                번호생성
-            </Text>
-        ) : (
-            <View />
+    const renderCreateLabel = ({ focused, color, position }) => {
+        return focused ? <Text style={getTabBarLabelStyle()}>번호생성</Text> : <View />;
+    };
+
+    const renderPickTabIcon = ({ focused, color, size }) => {
+        return (
+            <Image
+                source={pointIcon}
+                style={[
+                    getTabBarIconStyle(focused),
+                    { transform: [{ rotate: '-30deg' }, { scale: 1.3 }] },
+                ]}
+            />
         );
+    };
+
+    const renderPickLabel = ({ focused, color, position }) => {
+        return focused ? <Text style={getTabBarLabelStyle()}>번호선택</Text> : <View />;
     };
 
     return (
@@ -56,10 +68,18 @@ export default function MainScreen() {
             <Tab.Screen
                 name="Number"
                 options={{
-                    tabBarIcon: renderNumberTabIcon,
-                    tabBarLabel: renderNumberLabel,
+                    tabBarIcon: renderCreateTabIcon,
+                    tabBarLabel: renderCreateLabel,
                 }}
-                component={NumberTabView}
+                component={CreateTabView}
+            />
+            <Tab.Screen
+                name="Pick"
+                options={{
+                    tabBarIcon: renderPickTabIcon,
+                    tabBarLabel: renderPickLabel,
+                }}
+                component={PickTabView}
             />
         </Tab.Navigator>
     );
