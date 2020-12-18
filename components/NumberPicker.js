@@ -1,11 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { THEME_COLORS } from './../style/color';
-import Ball from './Ball';
+import { CheckBall } from './Ball';
 import downIcon from '../images/chevron-down.png';
 
-export default function NumberPicker({ selected = [], limit = 6 }) {
+export default function NumberPicker({
+    range = 45,
+    limit = 6,
+    whenPick = (numberList) => console.log(numberList),
+}) {
     const [visible, setVisible] = useState(true);
+    const [numberList, setNumberList] = useState([]);
     const bottom = useRef(new Animated.Value(0)).current;
     const transBottom = bottom.interpolate({
         inputRange: [0, 1],
@@ -30,15 +35,39 @@ export default function NumberPicker({ selected = [], limit = 6 }) {
         }
     }, [visible, bottom]);
 
+    useEffect(() => {
+        whenPick(numberList);
+    }, [whenPick, numberList]);
+
+    const onPickBall = useCallback(
+        (number, isChecked) => {
+            if (!isChecked) {
+                setNumberList(numberList.filter((num) => num !== number));
+            } else if (numberList.length < limit && numberList.indexOf(number) === -1) {
+                setNumberList([...numberList, number].sort((a, b) => a - b));
+            }
+        },
+        [limit, numberList]
+    );
+
     return (
         <Animated.View style={[styles.container, { transform: [{ translateY: transBottom }] }]}>
             <TouchableOpacity style={styles.button} onPress={() => setVisible(!visible)}>
                 <Image style={[styles.img, !visible && styles.reverse]} source={downIcon} />
             </TouchableOpacity>
             <View style={styles.numberContainer}>
-                {[...Array(45).keys()].map((num) => (
-                    <View style={styles.item}>
-                        <Ball number={num + 1} size={46} style={styles.ball} />
+                {[...Array(range).keys()].map((num) => (
+                    <View key={num + 1} style={styles.item}>
+                        <CheckBall
+                            number={num + 1}
+                            size={46}
+                            checked={numberList.indexOf(num + 1) !== -1}
+                            able={
+                                numberList.length < 6 ||
+                                (numberList.length >= 6 && numberList.indexOf(num + 1) !== -1)
+                            }
+                            onCheck={onPickBall}
+                        />
                     </View>
                 ))}
             </View>
