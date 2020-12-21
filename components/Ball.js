@@ -54,7 +54,7 @@ export function CheckBall({
     size = 36,
     checked = false,
     able = true,
-    onCheck = (number) => console.log(number),
+    onCheck = (number, isChecked) => console.log(number, isChecked),
     ...props
 }) {
     const transY = useRef(new Animated.Value(0)).current;

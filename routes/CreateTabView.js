@@ -21,13 +21,13 @@ export default function CreateTabView() {
                 val.setValue(0);
                 return Animated.timing(val, {
                     toValue: 1,
-                    duration: 1500,
+                    duration: 1200,
                     easing: Easing.bounce,
-                    delay: 100,
+                    delay: 10,
                     useNativeDriver: true,
                 });
             });
-            Animated.stagger(150, createAnimations).start();
+            Animated.stagger(100, createAnimations).start();
         }
     }, [numbers, translationY]);
 
@@ -37,7 +37,7 @@ export default function CreateTabView() {
             const destroyAnimations = translationY.map((val) => {
                 return Animated.timing(val, {
                     toValue: 2,
-                    duration: 1000,
+                    duration: 800,
                     easing: Easing.quad,
                     useNativeDriver: true,
                 });
