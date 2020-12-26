@@ -3,17 +3,25 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { isEmptyArray } from './../utils/check';
 import { getAllLottoDatas } from './../modules/api';
 import LottoCard from './../components/LottoCard';
+import { setLoading } from '../components/Popup';
 
 export default function HistoryTabView() {
     const [data, setData] = useState([]);
-    if (isEmptyArray(data)) {
-        getAllLottoDatas().then((rst) => setData(rst));
-    }
+
+    useEffect(() => {
+        if (isEmptyArray(data)) {
+            setLoading(true);
+            getAllLottoDatas().then((rst) => {
+                setData(rst);
+                setLoading(false);
+            });
+        }
+    }, []);
 
     return (
         <View>
             {isEmptyArray(data) ? (
-                <Text>Data Loading...</Text>
+                <Text style={{ alignSelf: 'center' }}>Data Loading...</Text>
             ) : (
                 <ScrollView>
                     {data.map((val) => (
