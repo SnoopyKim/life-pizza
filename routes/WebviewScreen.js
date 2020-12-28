@@ -5,11 +5,13 @@ import iconArrow from '../images/chevron-down.png';
 import iconBack from '../images/backspace-outline.png';
 import iconOpen from '../images/open-in-new.png';
 import { THEME_COLORS } from './../style/color';
+import { setLoading } from '../components/Popup';
 
 const WEB_URL = 'https://www.dhlottery.co.kr/common.do?method=main';
 
 export default function WebviewScreen({ navigation }) {
     const wvRef = useRef(null);
+    const [ready, setReady] = useState(false);
     const [canGoBack, setCanGoBack] = useState(false);
 
     const onAndroidBackPress = useCallback(() => {
@@ -27,11 +29,20 @@ export default function WebviewScreen({ navigation }) {
         };
     }, [onAndroidBackPress]);
 
+    useEffect(() => {
+        if (!ready) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [ready]);
+
     return (
         <View style={styles.screen}>
             <WebView
                 ref={wvRef}
                 source={{ uri: WEB_URL }}
+                onLoadEnd={() => setReady(true)}
                 onNavigationStateChange={(navState) => setCanGoBack(navState.canGoBack)}
             />
             {/* 웹뷰 컨트롤러 */}

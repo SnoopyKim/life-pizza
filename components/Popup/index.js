@@ -2,17 +2,17 @@ import React, { createRef, forwardRef, useEffect, useImperativeHandle, useState 
 import { StyleSheet, Text, View } from 'react-native';
 import { THEME_COLORS } from '../../style/color';
 import Loading from './Loading';
+import Alert from './Alert';
 
 const Popup = forwardRef((props, ref) => {
     const [dialog, setDialog] = useState(null);
 
     useImperativeHandle(ref, () => ({
         setLoading: (status) => {
-            if (status) {
-                setDialog(<Loading />);
-            } else {
-                setDialog(null);
-            }
+            setDialog(status ? <Loading /> : null);
+        },
+        setAlert: (status, message) => {
+            setDialog(status ? <Alert message={message} /> : null);
         },
     }));
 
@@ -37,6 +37,9 @@ export default PopupWrapper;
 
 export const setLoading = (status) => {
     popupRef.current.setLoading(status);
+};
+export const setAlert = (status, message) => {
+    popupRef.current.setAlert(status, message);
 };
 
 const styles = StyleSheet.create({

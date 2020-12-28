@@ -4,6 +4,7 @@ import { isEmptyArray } from './../utils/check';
 import { getAllLottoDatas } from './../modules/api';
 import LottoCard from './../components/LottoCard';
 import { setLoading } from '../components/Popup';
+import { setAlert } from './../components/Popup/index';
 
 export default function HistoryTabView() {
     const [data, setData] = useState([]);
@@ -14,9 +15,10 @@ export default function HistoryTabView() {
             getAllLottoDatas().then((rst) => {
                 setData(rst);
                 setLoading(false);
+                setAlert(true, '데이터 불러오기 완료');
             });
         }
-    }, []);
+    }, [data]);
 
     return (
         <View>

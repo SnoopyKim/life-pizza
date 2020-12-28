@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { BALL_COLORS, THEME_COLORS } from './../../style/color';
 
@@ -31,7 +31,6 @@ const Loading = () => {
         return () => {
             loopAnimation.stop();
             cancelAnimationFrame(loopAnimation);
-            console.log('when Loading off');
         };
     }, [rotate]);
 
