@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { isEmptyArray } from './../utils/check';
 import { getAllLottoDatas } from './../modules/api';
 import LottoCard from './../components/LottoCard';
@@ -28,21 +28,29 @@ export default function HistoryTabView() {
         console.log(selected);
     }, [selected]);
 
+    const renderCard = ({ item }) => {
+        return (
+            <LottoCard data={item}>
+                <TouchableOpacity style={styles.link} onPress={() => setSelected(item)}>
+                    <Text style={styles.textLink}>당첨금 확인하기</Text>
+                </TouchableOpacity>
+            </LottoCard>
+        );
+    };
+
     return (
         <View style={styles.screen}>
             <View>
                 <Text style={{ color: THEME_COLORS.GRAY_100 }}>{JSON.stringify(selected)}</Text>
             </View>
             <View style={styles.listContainer}>
-                <ScrollView style={styles.scrollView}>
-                    {data.map((val) => (
-                        <LottoCard key={val.round} data={val}>
-                            <TouchableOpacity style={styles.link} onPress={() => setSelected(val)}>
-                                <Text style={styles.textLink}>당첨금 확인하기</Text>
-                            </TouchableOpacity>
-                        </LottoCard>
-                    ))}
-                </ScrollView>
+                <FlatList
+                    data={data}
+                    renderItem={renderCard}
+                    keyExtractor={(item) => item.round.toString()}
+                    initialNumToRender={12}
+                    style={styles.scrollView}
+                />
             </View>
         </View>
     );
