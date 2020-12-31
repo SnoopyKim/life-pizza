@@ -12,3 +12,11 @@ export const createNumberSet = () => {
     }
     return set.sort((a, b) => a - b);
 };
+
+export const numberToStringWithCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+export const stringToNumberWithoutCommas = (str) => {
+    return parseInt(str.replace(/[^0-9]/g, ''), 10);
+};

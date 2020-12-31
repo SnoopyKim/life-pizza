@@ -1,9 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Image, StyleSheet, Text, TouchableOpacity, View, Easing } from 'react-native';
+import {
+    Animated,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Easing,
+    TouchableHighlight,
+} from 'react-native';
 import iconArrow from '../images/chevron-down.png';
 import { getCurrentRound } from '../modules/api';
 import Ball from './Ball';
 import { THEME_COLORS } from './../style/color';
+
+const ANIM_DURATION = 250;
 
 export default function LottoCard({ children, data }) {
     // 최신 결과만 처음부터 열려있는 상태
@@ -50,19 +61,19 @@ export default function LottoCard({ children, data }) {
         }
         const rotateAnimation = Animated.timing(rotateValue, {
             toValue: opened ? 1 : 0,
-            duration: 300,
+            duration: ANIM_DURATION,
             easing: Easing.linear,
             useNativeDriver: true,
         });
         const heightAnimation = Animated.timing(heightValue, {
             toValue: opened ? cardHeight + contentHeight : cardHeight,
-            duration: 300,
+            duration: ANIM_DURATION,
             easing: Easing.linear,
             useNativeDriver: false,
         });
         const transAnimation = Animated.timing(transValue, {
             toValue: opened ? contentHeight : 0,
-            duration: 300,
+            duration: ANIM_DURATION,
             easing: Easing.linear,
             useNativeDriver: true,
         });
@@ -73,27 +84,29 @@ export default function LottoCard({ children, data }) {
         <Animated.View
             style={[styles.container, { height: mounted ? heightValue : undefined }]}
             onLayout={onCardMounted}>
-            <TouchableOpacity
+            <TouchableHighlight
                 style={styles.header}
-                activeOpacity={1.0}
+                underlayColor={THEME_COLORS.GRAY_100}
                 onPress={() => setOpened(!opened)}>
-                <View style={styles.headerTitle}>
-                    <Text style={styles.title}>{data.round}회</Text>
-                    <Text style={styles.subtitle}>{data.date}</Text>
-                </View>
-                <Animated.Image
-                    style={[styles.icon, { transform: [{ rotate: rotate }] }]}
-                    source={iconArrow}
-                    resizeMode={'contain'}
-                />
-            </TouchableOpacity>
+                <>
+                    <View style={styles.headerTitle}>
+                        <Text style={styles.title}>{data.round}회</Text>
+                        <Text style={styles.subtitle}>{data.date}</Text>
+                    </View>
+                    <Animated.Image
+                        style={[styles.icon, { transform: [{ rotate: rotate }] }]}
+                        source={iconArrow}
+                        resizeMode={'contain'}
+                    />
+                </>
+            </TouchableHighlight>
             <Animated.View
                 style={[
                     styles.content,
-                    { marginTop: -75, transform: [{ translateY: transValue }] },
+                    { marginTop: -80, transform: [{ translateY: transValue }] },
                 ]}
                 onLayout={onContentMounted}>
-                <View style={styles.numberView}>
+                <View style={[styles.numberView, children && { marginBottom: 5 }]}>
                     <Ball number={data.no1} style={styles.firstBall} />
                     <Ball number={data.no2} style={styles.ball} />
                     <Ball number={data.no3} style={styles.ball} />

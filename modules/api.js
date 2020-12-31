@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import cheerio from 'react-native-cheerio';
+import { stringToNumberWithoutCommas } from '../utils/number';
 
 const WEEK_MILLISECOND = 1000 * 60 * 60 * 24 * 7;
 const UPDATE_TIME = 'T21:00:00';
@@ -43,50 +44,25 @@ export const getAllLottoDatas = async () => {
                 tds.splice(0, 1);
             }
             const rowData = {
-                round: parseInt($(tds[0]).text(), 10),
+                round: stringToNumberWithoutCommas($(tds[0]).text()),
                 date: $(tds[1]).text().replace(/\./gi, '-'),
-                firstWinCnt: parseInt($(tds[2]).text(), 10),
-                firstWinPrc: parseInt(
-                    $(tds[3])
-                        .text()
-                        .replace(/[^0-9]/g, ''),
-                    10
-                ),
-                secondWinCnt: parseInt($(tds[4]).text(), 10),
-                secondWinPrc: parseInt(
-                    $(tds[5])
-                        .text()
-                        .replace(/[^0-9]/g, ''),
-                    10
-                ),
-                thirdWinCnt: parseInt($(tds[6]).text(), 10),
-                thirdWinPrc: parseInt(
-                    $(tds[7])
-                        .text()
-                        .replace(/[^0-9]/g, ''),
-                    10
-                ),
-                fourthWinCnt: parseInt($(tds[8]).text(), 10),
-                fourthWinPrc: parseInt(
-                    $(tds[9])
-                        .text()
-                        .replace(/[^0-9]/g, ''),
-                    10
-                ),
-                fifthWinCnt: parseInt($(tds[10]).text(), 10),
-                fifthWinPrc: parseInt(
-                    $(tds[11])
-                        .text()
-                        .replace(/[^0-9]/g, ''),
-                    10
-                ),
-                no1: parseInt($(tds[12]).text(), 10),
-                no2: parseInt($(tds[13]).text(), 10),
-                no3: parseInt($(tds[14]).text(), 10),
-                no4: parseInt($(tds[15]).text(), 10),
-                no5: parseInt($(tds[16]).text(), 10),
-                no6: parseInt($(tds[17]).text(), 10),
-                bno: parseInt($(tds[18]).text(), 10),
+                firstWinCnt: stringToNumberWithoutCommas($(tds[2]).text()),
+                firstWinPrc: stringToNumberWithoutCommas($(tds[3]).text()),
+                secondWinCnt: stringToNumberWithoutCommas($(tds[4]).text()),
+                secondWinPrc: stringToNumberWithoutCommas($(tds[5]).text()),
+                thirdWinCnt: stringToNumberWithoutCommas($(tds[6]).text()),
+                thirdWinPrc: stringToNumberWithoutCommas($(tds[7]).text()),
+                fourthWinCnt: stringToNumberWithoutCommas($(tds[8]).text()),
+                fourthWinPrc: stringToNumberWithoutCommas($(tds[9]).text()),
+                fifthWinCnt: stringToNumberWithoutCommas($(tds[10]).text()),
+                fifthWinPrc: stringToNumberWithoutCommas($(tds[11]).text()),
+                no1: stringToNumberWithoutCommas($(tds[12]).text()),
+                no2: stringToNumberWithoutCommas($(tds[13]).text()),
+                no3: stringToNumberWithoutCommas($(tds[14]).text()),
+                no4: stringToNumberWithoutCommas($(tds[15]).text()),
+                no5: stringToNumberWithoutCommas($(tds[16]).text()),
+                no6: stringToNumberWithoutCommas($(tds[17]).text()),
+                bno: stringToNumberWithoutCommas($(tds[18]).text()),
             };
             result.push(rowData);
         });

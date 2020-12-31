@@ -6,6 +6,7 @@ import LottoCard from './../components/LottoCard';
 import { setLoading } from '../components/Popup';
 import { setAlert } from './../components/Popup/index';
 import { THEME_COLORS } from './../style/color';
+import PriceCard from '../components/PriceCard';
 
 export default function HistoryTabView() {
     const [data, setData] = useState([]);
@@ -24,24 +25,18 @@ export default function HistoryTabView() {
         }
     }, [data]);
 
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
-
-    const renderCard = ({ item }) => {
-        return (
-            <LottoCard data={item}>
-                <TouchableOpacity style={styles.link} onPress={() => setSelected(item)}>
-                    <Text style={styles.textLink}>당첨금 확인하기</Text>
-                </TouchableOpacity>
-            </LottoCard>
-        );
-    };
+    const renderCard = ({ item }) => (
+        <LottoCard data={item}>
+            <TouchableOpacity style={styles.link} onPress={() => setSelected(item)}>
+                <Text style={styles.textLink}>당첨금 확인하기</Text>
+            </TouchableOpacity>
+        </LottoCard>
+    );
 
     return (
         <View style={styles.screen}>
-            <View>
-                <Text style={{ color: THEME_COLORS.GRAY_100 }}>{JSON.stringify(selected)}</Text>
+            <View style={styles.priceContainer}>
+                <PriceCard data={selected} />
             </View>
             <View style={styles.listContainer}>
                 <FlatList
@@ -60,6 +55,9 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
+    },
+    priceContainer: {
+        alignItems: 'center',
     },
     listContainer: {
         flex: 1,
