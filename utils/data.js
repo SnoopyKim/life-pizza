@@ -1,0 +1,23 @@
+export const dataToModel = (raw) => ({
+    round: raw.round,
+    date: raw.date,
+    numbers: {
+        no1: raw.no1,
+        no2: raw.no2,
+        no3: raw.no3,
+        no4: raw.no4,
+        no5: raw.no5,
+        no6: raw.no6,
+        bno: raw.bno,
+    },
+    firstWinCnt: raw.firstWinCnt,
+    firstWinPrc: raw.firstWinPrc,
+    secondWinCnt: raw.secondWinCnt,
+    secondWinPrc: raw.secondWinPrc,
+    thirdWinCnt: raw.thirdWinCnt,
+    thirdWinPrc: raw.thirdWinPrc,
+    fourthWinCnt: raw.fourthWinCnt,
+    fourthWinPrc: raw.fourthWinPrc,
+    fifthWinCnt: raw.fifthWinCnt,
+    fifthWinPrc: raw.fifthWinPrc,
+});

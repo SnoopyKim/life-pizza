@@ -1,130 +1,45 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-    Animated,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    Easing,
-    TouchableHighlight,
-} from 'react-native';
-import iconArrow from '../images/chevron-down.png';
-import { getCurrentRound } from '../modules/api';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, StyleSheet, Text, View, Easing, TouchableHighlight } from 'react-native';
+import iconSelected from '../images/hand-pointing-left.png';
 import Ball from './Ball';
 import { THEME_COLORS } from './../style/color';
 
 const ANIM_DURATION = 250;
 
-export default function LottoCard({ children, data }) {
+export default function LottoCard({ children, data, selected }) {
     // 최신 결과만 처음부터 열려있는 상태
-    const [opened, setOpened] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    const [cardHeight, setCardHeight] = useState(0);
-    const [contentHeight, setContentHeight] = useState(0);
-
-    const rotateValue = useRef(new Animated.Value(0)).current;
-    const rotate = rotateValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '180deg'],
-    });
-    const transValue = useRef(new Animated.Value(0)).current;
-    const heightValue = useRef(new Animated.Value(0)).current;
-
-    const onCardMounted = (e) => {
-        if (!mounted) {
-            setCardHeight(e.nativeEvent.layout.height);
-        }
-    };
-    const onContentMounted = (e) => {
-        if (!mounted) {
-            setContentHeight(e.nativeEvent.layout.height);
-        }
-    };
-
-    useEffect(() => {
-        if (cardHeight * contentHeight !== 0) {
-            heightValue.setValue(cardHeight);
-            setMounted(true);
-        }
-    }, [cardHeight, contentHeight]);
-
-    useEffect(() => {
-        if (mounted) {
-            setOpened(data.round === getCurrentRound());
-        }
-    }, [mounted]);
-
-    useEffect(() => {
-        if (!mounted) {
-            return;
-        }
-        const rotateAnimation = Animated.timing(rotateValue, {
-            toValue: opened ? 1 : 0,
-            duration: ANIM_DURATION,
-            easing: Easing.linear,
-            useNativeDriver: true,
-        });
-        const heightAnimation = Animated.timing(heightValue, {
-            toValue: opened ? cardHeight + contentHeight : cardHeight,
-            duration: ANIM_DURATION,
-            easing: Easing.linear,
-            useNativeDriver: false,
-        });
-        const transAnimation = Animated.timing(transValue, {
-            toValue: opened ? contentHeight : 0,
-            duration: ANIM_DURATION,
-            easing: Easing.linear,
-            useNativeDriver: true,
-        });
-        Animated.parallel([rotateAnimation, heightAnimation, transAnimation]).start();
-    }, [opened]);
+    const { numbers } = data;
 
     return (
-        <Animated.View
-            style={[styles.container, { height: mounted ? heightValue : undefined }]}
-            onLayout={onCardMounted}>
-            <TouchableHighlight
-                style={styles.header}
-                underlayColor={THEME_COLORS.GRAY_100}
-                onPress={() => setOpened(!opened)}>
-                <>
-                    <View style={styles.headerTitle}>
-                        <Text style={styles.title}>{data.round}회</Text>
-                        <Text style={styles.subtitle}>{data.date}</Text>
-                    </View>
-                    <Animated.Image
-                        style={[styles.icon, { transform: [{ rotate: rotate }] }]}
-                        source={iconArrow}
-                        resizeMode={'contain'}
-                    />
-                </>
-            </TouchableHighlight>
-            <Animated.View
-                style={[
-                    styles.content,
-                    { marginTop: -80, transform: [{ translateY: transValue }] },
-                ]}
-                onLayout={onContentMounted}>
-                <View style={[styles.numberView, children && { marginBottom: 5 }]}>
-                    <Ball number={data.no1} style={styles.firstBall} />
-                    <Ball number={data.no2} style={styles.ball} />
-                    <Ball number={data.no3} style={styles.ball} />
-                    <Ball number={data.no4} style={styles.ball} />
-                    <Ball number={data.no5} style={styles.ball} />
-                    <Ball number={data.no6} style={styles.ball} />
+        <View style={[styles.container, selected && styles.selected]}>
+            <View style={styles.header}>
+                <View style={styles.headerTitle}>
+                    <Text style={styles.title}>{data.round}회</Text>
+                    <Text style={styles.subtitle}>{data.date}</Text>
+                    {selected && <Image source={iconSelected} style={styles.icon} />}
+                </View>
+            </View>
+            <View style={[styles.content]}>
+                <View style={[styles.numberView, children && { marginBottom: 10 }]}>
+                    <Ball number={numbers.no1} style={styles.firstBall} />
+                    <Ball number={numbers.no2} style={styles.ball} />
+                    <Ball number={numbers.no3} style={styles.ball} />
+                    <Ball number={numbers.no4} style={styles.ball} />
+                    <Ball number={numbers.no5} style={styles.ball} />
+                    <Ball number={numbers.no6} style={styles.ball} />
                     <Text style={styles.dividing}>+</Text>
-                    <Ball number={data.bno} style={styles.bonusBall} />
+                    <Ball number={numbers.bno} style={styles.bonusBall} />
                 </View>
                 {children}
-            </Animated.View>
-        </Animated.View>
+            </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         marginVertical: 5,
+        padding: 15,
         minHeight: 60,
         backgroundColor: THEME_COLORS.GRAY_50,
         borderRadius: 20,
@@ -133,12 +48,10 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     header: {
-        backgroundColor: THEME_COLORS.GRAY_50,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
+        height: 30,
         borderRadius: 20,
+        paddingHorizontal: 5,
         flexDirection: 'row',
-        zIndex: 5,
     },
     headerTitle: {
         flex: 1,
@@ -157,20 +70,18 @@ const styles = StyleSheet.create({
         marginStart: 10,
     },
     icon: {
-        marginVertical: 5,
-        width: 30,
-        height: 30,
+        marginStart: 10,
+        width: 25,
+        height: 25,
+        tintColor: THEME_COLORS.MIDNIGHT_BLACK,
     },
     reverse: {
         transform: [{ rotate: '180deg' }],
     },
     content: {
         flex: 1,
+        paddingTop: 10,
         borderRadius: 20,
-        paddingHorizontal: 10,
-        paddingTop: 5,
-        paddingBottom: 15,
-        backgroundColor: THEME_COLORS.GRAY_50,
     },
     numberView: {
         flexDirection: 'row',

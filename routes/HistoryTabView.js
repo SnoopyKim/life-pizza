@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { isEmptyArray } from './../utils/check';
-import { getAllLottoDatas } from './../modules/api';
+import { getCurrentRound, getLottoDatasFromApi } from './../modules/api';
 import LottoCard from './../components/LottoCard';
 import { setLoading } from '../components/Popup';
 import { setAlert } from './../components/Popup/index';
 import { THEME_COLORS } from './../style/color';
 import PriceCard from '../components/PriceCard';
+import { getHistoryData } from '../db';
 
 export default function HistoryTabView() {
     const [data, setData] = useState([]);
@@ -15,18 +16,23 @@ export default function HistoryTabView() {
     useEffect(() => {
         if (isEmptyArray(data)) {
             setLoading(true);
-            getAllLottoDatas().then((rst) => {
-                setData(rst);
-                setLoading(false);
-                setAlert(true, '데이터 불러오기 완료');
-            });
+            const history = getHistoryData();
+            if (history.length < getCurrentRound()) {
+                getLottoDatasFromApi(history.length + 1).then((rst) => {
+                    setData(getHistoryData());
+                    setAlert(true, '데이터 불러오기 완료');
+                });
+            } else {
+                setData(getHistoryData());
+            }
         } else {
+            setLoading(false);
             setSelected(data[0]);
         }
     }, [data]);
 
     const renderCard = ({ item }) => (
-        <LottoCard data={item}>
+        <LottoCard data={item} selected={item.round === selected.round}>
             <TouchableOpacity style={styles.link} onPress={() => setSelected(item)}>
                 <Text style={styles.textLink}>당첨금 확인하기</Text>
             </TouchableOpacity>

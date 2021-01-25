@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import MainScreen from './routes/MainScreen';
@@ -12,6 +12,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
     StatusBar.setBackgroundColor(THEME_COLORS.MIDNIGHT_BLACK, true);
+
     return (
         <PopupWrapper>
             <NavigationContainer>

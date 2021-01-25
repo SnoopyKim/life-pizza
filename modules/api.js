@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import cheerio from 'react-native-cheerio';
+import { addHistoryData } from '../db';
 import { stringToNumberWithoutCommas } from '../utils/number';
 
 const WEEK_MILLISECOND = 1000 * 60 * 60 * 24 * 7;
@@ -16,7 +17,7 @@ export const getCurrentRound = () => {
 };
 
 // 한 회차 결과 쿼리
-export const getLottoData = async (round) => {
+export const getLottoDataFromApi = async (round) => {
     return await Axios.get('http://www.dhlottery.co.kr/common.do', {
         params: {
             method: 'getLottoNumber',
@@ -26,13 +27,13 @@ export const getLottoData = async (round) => {
 };
 
 // response가 html형식이므로 cheerio를 사용해 파싱
-export const getAllLottoDatas = async () => {
+export const getLottoDatasFromApi = async (startRound = 1, endRound = getCurrentRound()) => {
     const result = [];
     await Axios.get('https://dhlottery.co.kr/gameResult.do', {
         params: {
             method: 'allWinExel',
-            drwNoStart: 1,
-            drwNoEnd: getCurrentRound(),
+            drwNoStart: startRound,
+            drwNoEnd: endRound,
         },
         responseType: 'text',
     }).then((response) => {
@@ -65,6 +66,7 @@ export const getAllLottoDatas = async () => {
                 bno: stringToNumberWithoutCommas($(tds[18]).text()),
             };
             result.push(rowData);
+            addHistoryData(rowData);
         });
     });
     return result;
