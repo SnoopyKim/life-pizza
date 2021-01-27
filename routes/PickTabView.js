@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import { THEME_COLORS } from './../style/color';
 import NumberPicker from './../components/NumberPicker';
 import Ball from '../components/Ball';
-import { addUserData } from '../db';
+import { addHistoryData } from '../db';
 import { numberToModel } from '../utils/data';
 import { setAlert } from './../components/Popup/index';
 
@@ -15,7 +15,6 @@ export default function PickTabView() {
         if (numbers.length === 6) {
             pickerRef.current.slideDown();
         }
-        console.log(numbers);
     }, [numbers]);
 
     const onPick = (numberList) => {
@@ -23,7 +22,7 @@ export default function PickTabView() {
     };
 
     const confirmNumbers = () => {
-        addUserData(numberToModel(numbers));
+        addHistoryData(numbers);
         setAlert(true, "번호가 저장되었습니다.\n'내 정보'에서 확인하세요");
         // setNumbers([]);
         pickerRef.current.initNumbers();

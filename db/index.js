@@ -1,10 +1,13 @@
 import Realm from 'realm';
-import { dataToModel } from '../utils/data';
+import { dataToModel, numberToModel } from '../utils/data';
 
-// 번호 데이터 스키마
-const NumberSchema = {
-    name: 'Number',
+// 당첨 데이터 스키마
+const ResultSchema = {
+    name: 'Result',
+    primaryKey: 'round',
     properties: {
+        round: 'int',
+        date: 'string',
         no1: 'int',
         no2: 'int',
         no3: 'int',
@@ -12,17 +15,6 @@ const NumberSchema = {
         no5: 'int',
         no6: 'int',
         bno: 'int',
-    },
-};
-
-// 당첨 데이터 스키마
-const HistorySchema = {
-    name: 'History',
-    primaryKey: 'round',
-    properties: {
-        round: 'int',
-        date: 'string',
-        numbers: 'Number',
         firstWinCnt: 'int',
         firstWinPrc: 'int',
         secondWinCnt: 'int',
@@ -37,8 +29,8 @@ const HistorySchema = {
 };
 
 // 사용자 번호 스키마
-const UserSchema = {
-    name: 'User',
+const HistorySchema = {
+    name: 'History',
     properties: {
         round: 'int',
         date: 'string',
@@ -52,21 +44,21 @@ const UserSchema = {
 };
 
 let realm = new Realm({
-    schema: [NumberSchema, HistorySchema, UserSchema],
-    schemaVersion: 0,
+    schema: [ResultSchema, HistorySchema],
+    schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,
 });
 
-export const getHistoryData = () => realm.objects('History').sorted('round', true);
-export const addHistoryData = (data) => {
+export const getResultData = () => realm.objects('Result').sorted('round', true);
+export const addResultData = (data) => {
     realm.write(() => {
-        realm.create('History', dataToModel(data));
+        realm.create('Result', dataToModel(data));
     });
 };
 
-export const getUserData = () => realm.objects('User').sorted('date', true);
-export const addUserData = (data) => {
+export const getHistoryData = () => realm.objects('History').sorted('date', true);
+export const addHistoryData = (data) => {
     realm.write(() => {
-        realm.create('User', data);
+        realm.create('History', numberToModel(data));
     });
 };

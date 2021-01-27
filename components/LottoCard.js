@@ -4,11 +4,9 @@ import iconSelected from '../images/hand-pointing-left.png';
 import Ball from './Ball';
 import { THEME_COLORS } from './../style/color';
 
-const ANIM_DURATION = 250;
-
 export default function LottoCard({ children, data, selected }) {
     // 최신 결과만 처음부터 열려있는 상태
-    const { numbers } = data;
+    const { no1, no2, no3, no4, no5, no6, bno } = data;
 
     return (
         <View style={[styles.container, selected && styles.selected]}>
@@ -20,15 +18,15 @@ export default function LottoCard({ children, data, selected }) {
                 </View>
             </View>
             <View style={[styles.content]}>
-                <View style={[styles.numberView, children && { marginBottom: 10 }]}>
-                    <Ball number={numbers.no1} style={styles.firstBall} />
-                    <Ball number={numbers.no2} style={styles.ball} />
-                    <Ball number={numbers.no3} style={styles.ball} />
-                    <Ball number={numbers.no4} style={styles.ball} />
-                    <Ball number={numbers.no5} style={styles.ball} />
-                    <Ball number={numbers.no6} style={styles.ball} />
-                    <Text style={styles.dividing}>+</Text>
-                    <Ball number={numbers.bno} style={styles.bonusBall} />
+                <View style={styles.numberView}>
+                    <Ball number={no1} style={styles.firstBall} />
+                    <Ball number={no2} style={styles.ball} />
+                    <Ball number={no3} style={styles.ball} />
+                    <Ball number={no4} style={styles.ball} />
+                    <Ball number={no5} style={styles.ball} />
+                    <Ball number={no6} style={styles.ball} />
+                    {bno && <Text style={styles.dividing}>+</Text>}
+                    {bno && <Ball number={bno} style={styles.bonusBall} />}
                 </View>
                 {children}
             </View>
@@ -86,6 +84,7 @@ const styles = StyleSheet.create({
     numberView: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        marginBottom: 10,
     },
     dividing: {
         color: 'black',

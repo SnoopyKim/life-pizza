@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import cheerio from 'react-native-cheerio';
-import { addHistoryData } from '../db';
+import { addResultData } from '../db';
 import { stringToNumberWithoutCommas } from '../utils/number';
 
 const WEEK_MILLISECOND = 1000 * 60 * 60 * 24 * 7;
@@ -66,7 +66,7 @@ export const getLottoDatasFromApi = async (startRound = 1, endRound = getCurrent
                 bno: stringToNumberWithoutCommas($(tds[18]).text()),
             };
             result.push(rowData);
-            addHistoryData(rowData);
+            addResultData(rowData);
         });
     });
     return result;

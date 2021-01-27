@@ -4,8 +4,7 @@ import Ball from '../components/Ball';
 import { createNumberSet } from '../utils/number';
 import { isEmptyArray } from '../utils/check';
 import { THEME_COLORS } from '../style/color';
-import { addUserData } from '../db';
-import { getCurrentRound } from '../modules/api';
+import { addHistoryData } from '../db';
 import { numberToModel } from '../utils/data';
 import { setAlert } from './../components/Popup/index';
 
@@ -57,7 +56,7 @@ export default function CreateTabView() {
     };
 
     const confirmNumbers = () => {
-        addUserData(numberToModel(numbers));
+        addHistoryData(numbers);
         setAlert(true, "번호가 저장되었습니다.\n'내 정보'에서 확인하세요");
         setNumbers([]);
     };
