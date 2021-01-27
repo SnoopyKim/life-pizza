@@ -4,6 +4,10 @@ import Ball from '../components/Ball';
 import { createNumberSet } from '../utils/number';
 import { isEmptyArray } from '../utils/check';
 import { THEME_COLORS } from '../style/color';
+import { addUserData } from '../db';
+import { getCurrentRound } from '../modules/api';
+import { numberToModel } from '../utils/data';
+import { setAlert } from './../components/Popup/index';
 
 export default function CreateTabView() {
     const [numbers, setNumbers] = useState([]);
@@ -52,6 +56,12 @@ export default function CreateTabView() {
         }
     };
 
+    const confirmNumbers = () => {
+        addUserData(numberToModel(numbers));
+        setAlert(true, "번호가 저장되었습니다.\n'내 정보'에서 확인하세요");
+        setNumbers([]);
+    };
+
     const renderNumbers = () => {
         return numbers.map((number, idx) => (
             <Animated.View
@@ -65,14 +75,24 @@ export default function CreateTabView() {
     return (
         <View style={styles.screen}>
             <View style={styles.numberContainer}>{renderNumbers()}</View>
-            <TouchableHighlight
-                style={styles.createButton}
-                underlayColor={THEME_COLORS.GRAY_600}
-                onPress={createNumbers}>
-                <Text style={styles.buttonText}>
-                    {isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}
-                </Text>
-            </TouchableHighlight>
+            <View style={styles.buttonWrapper}>
+                <TouchableHighlight
+                    style={styles.button}
+                    underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
+                    onPress={createNumbers}>
+                    <Text style={styles.buttonText}>
+                        {isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}
+                    </Text>
+                </TouchableHighlight>
+                {!isEmptyArray(numbers) && (
+                    <TouchableHighlight
+                        style={styles.button}
+                        underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
+                        onPress={confirmNumbers}>
+                        <Text style={styles.buttonText}>번호 저장</Text>
+                    </TouchableHighlight>
+                )}
+            </View>
         </View>
     );
 }
@@ -80,31 +100,29 @@ export default function CreateTabView() {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: THEME_COLORS.GRAY_100,
+        backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
     },
     numberContainer: {
         marginHorizontal: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    createButton: {
+    buttonWrapper: {
         position: 'absolute',
-        alignSelf: 'center',
+        marginHorizontal: 20,
+        justifyContent: 'space-around',
+        start: 0,
+        end: 0,
         bottom: 20,
-        width: 150,
-        height: 60,
-        borderRadius: 15,
+        flexDirection: 'row',
+    },
+    button: {
+        width: 130,
+        height: 50,
+        borderRadius: 10,
         backgroundColor: THEME_COLORS.MIDNIGHT_BLACK,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: THEME_COLORS.GRAY_900,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowRadius: 3.84,
-        shadowOpacity: 0.5,
-        elevation: 5,
     },
     buttonText: {
         color: THEME_COLORS.GRAY_100,

@@ -1,3 +1,6 @@
+import { getCurrentRound } from './../modules/api';
+import { getFormattedDate } from './date';
+
 export const dataToModel = (raw) => ({
     round: raw.round,
     date: raw.date,
@@ -20,4 +23,15 @@ export const dataToModel = (raw) => ({
     fourthWinPrc: raw.fourthWinPrc,
     fifthWinCnt: raw.fifthWinCnt,
     fifthWinPrc: raw.fifthWinPrc,
+});
+
+export const numberToModel = (numbers) => ({
+    round: getCurrentRound() + 1,
+    date: getFormattedDate(new Date()),
+    no1: numbers[0],
+    no2: numbers[1],
+    no3: numbers[2],
+    no4: numbers[3],
+    no5: numbers[4],
+    no6: numbers[5],
 });

@@ -12,7 +12,6 @@ const Stack = createStackNavigator();
 
 const App = () => {
     StatusBar.setBackgroundColor(THEME_COLORS.MIDNIGHT_BLACK, true);
-
     return (
         <PopupWrapper>
             <NavigationContainer>

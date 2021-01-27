@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
     textConfirm: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: THEME_COLORS.GRAY_600,
+        color: THEME_COLORS.MIDNIGHT_BLACK,
     },
 });

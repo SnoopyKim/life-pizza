@@ -56,6 +56,9 @@ export default forwardRef(
 
         //
         useImperativeHandle(ref, () => ({
+            initNumbers() {
+                setNumberList([]);
+            },
             slideDown() {
                 setVisible(false);
             },
@@ -98,9 +101,6 @@ const styles = StyleSheet.create({
         width: 322,
         height: 502,
         bottom: 0,
-        elevation: 5,
-        borderColor: THEME_COLORS.GRAY_200,
-        borderWidth: 1,
     },
     button: {
         height: 40,

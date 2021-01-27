@@ -12,7 +12,7 @@ export const getTabBarIconStyle = (focused) => {
 export const getTabBarLabelStyle = () => {
     return {
         color: THEME_COLORS.GRAY_100,
-        fontSize: 13,
+        fontSize: 11,
         marginBottom: 4,
     };
 };
