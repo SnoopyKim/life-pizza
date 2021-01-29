@@ -5,7 +5,6 @@ import { createNumberSet } from '../utils/number';
 import { isEmptyArray } from '../utils/check';
 import { THEME_COLORS } from '../style/color';
 import { addHistoryData } from '../db';
-import { numberToModel } from '../utils/data';
 import { setAlert } from './../components/Popup/index';
 
 export default function CreateTabView() {
@@ -14,7 +13,7 @@ export default function CreateTabView() {
     const ballTranslateY = translationY.map((val, idx) =>
         val.interpolate({
             inputRange: [0, 1, 2],
-            outputRange: [-36, 200, 700],
+            outputRange: [-32, 200, 700],
         })
     );
 
@@ -63,9 +62,7 @@ export default function CreateTabView() {
 
     const renderNumbers = () => {
         return numbers.map((number, idx) => (
-            <Animated.View
-                key={number}
-                style={{ transform: [{ translateY: ballTranslateY[idx] }] }}>
+            <Animated.View key={number} style={{ transform: [{ translateY: ballTranslateY[idx] }] }}>
                 <Ball number={number} />
             </Animated.View>
         ));
@@ -79,9 +76,7 @@ export default function CreateTabView() {
                     style={styles.button}
                     underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
                     onPress={createNumbers}>
-                    <Text style={styles.buttonText}>
-                        {isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}
-                    </Text>
+                    <Text style={styles.buttonText}>{isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}</Text>
                 </TouchableHighlight>
                 {!isEmptyArray(numbers) && (
                     <TouchableHighlight

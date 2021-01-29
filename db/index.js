@@ -49,14 +49,17 @@ let realm = new Realm({
     deleteRealmIfMigrationNeeded: true,
 });
 
-export const getResultData = () => realm.objects('Result').sorted('round', true);
+let resultData = realm.objects('Result');
+export const getResultData = () => resultData.sorted('round', true);
+export const getSingleResultData = (round) => realm.objectForPrimaryKey('Result', round);
 export const addResultData = (data) => {
     realm.write(() => {
         realm.create('Result', dataToModel(data));
     });
 };
 
-export const getHistoryData = () => realm.objects('History').sorted('date', true);
+let historyData = realm.objects('History');
+export const getHistoryData = () => historyData.sorted('date', true);
 export const addHistoryData = (data) => {
     realm.write(() => {
         realm.create('History', numberToModel(data));

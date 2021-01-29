@@ -3,8 +3,8 @@ import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { getBallColor } from '../style/color';
 import { THEME_COLORS } from './../style/color';
 
-export default function Ball({ number, size = 36, ...props }) {
-    const getStyleForBox = (size) => {
+export default function Ball({ number, size = 32, ...props }) {
+    const getStyleForBox = () => {
         return {
             ...styles.box,
             width: size,
@@ -14,19 +14,19 @@ export default function Ball({ number, size = 36, ...props }) {
         };
     };
 
-    const getStyleForNumber = (size) => {
+    const getStyleForNumber = () => {
         return { ...styles.number, color: THEME_COLORS.GRAY_50, fontSize: size / 2 };
     };
 
     return (
-        <View style={[getStyleForBox(size), props.style]}>
-            <Text style={[getStyleForNumber(size), props.textStyle]}>{number}</Text>
+        <View style={[getStyleForBox(), props.style]}>
+            <Text style={[getStyleForNumber(), props.textStyle]}>{number}</Text>
         </View>
     );
 }
 
-export function UnCheckedBall({ number, size = 36, ...props }) {
-    const getStyleForBox = (size) => {
+export function UnCheckedBall({ number, size = 32, ...props }) {
+    const getStyleForBox = () => {
         return {
             ...styles.box,
             width: size,
@@ -38,13 +38,13 @@ export function UnCheckedBall({ number, size = 36, ...props }) {
         };
     };
 
-    const getStyleForNumber = (size) => {
+    const getStyleForNumber = () => {
         return { ...styles.number, color: THEME_COLORS.GRAY_400, fontSize: size / 2 };
     };
 
     return (
-        <View style={[getStyleForBox(size), props.style]}>
-            <Text style={[getStyleForNumber(size), props.textStyle]}>{number}</Text>
+        <View style={[getStyleForBox(), props.style]}>
+            <Text style={[getStyleForNumber(), props.textStyle]}>{number}</Text>
         </View>
     );
 }
@@ -86,6 +86,28 @@ export function CheckBall({
     );
 }
 
+export function BallSet({ numbers, size = 32, style }) {
+    const { no1, no2, no3, no4, no5, no6, bno } = numbers;
+    const getDividingStyle = () => ({
+        color: THEME_COLORS.MIDNIGHT_BLACK,
+        lineHeight: size,
+        fontSize: size * 0.7,
+        fontWeight: '700',
+    });
+    return (
+        <View style={[styles.numberView, style]}>
+            <Ball number={no1} size={size} />
+            <Ball number={no2} size={size} />
+            <Ball number={no3} size={size} />
+            <Ball number={no4} size={size} />
+            <Ball number={no5} size={size} />
+            <Ball number={no6} size={size} />
+            {bno && <Text style={getDividingStyle()}>+</Text>}
+            {bno && <Ball number={bno} size={size} />}
+        </View>
+    );
+}
+
 const styles = StyleSheet.create({
     box: {
         alignItems: 'center',
@@ -93,5 +115,10 @@ const styles = StyleSheet.create({
     },
     number: {
         fontWeight: '700',
+    },
+    numberView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     },
 });

@@ -4,7 +4,6 @@ import { THEME_COLORS } from './../style/color';
 import NumberPicker from './../components/NumberPicker';
 import Ball from '../components/Ball';
 import { addHistoryData } from '../db';
-import { numberToModel } from '../utils/data';
 import { setAlert } from './../components/Popup/index';
 
 export default function PickTabView() {
@@ -44,9 +43,7 @@ export default function PickTabView() {
             <Text style={styles.textSelected}>선택한 번호</Text>
             {renderSelectedView()}
             {numbers.length === 6 && (
-                <TouchableHighlight
-                    underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
-                    onPress={confirmNumbers}>
+                <TouchableHighlight underlayColor={THEME_COLORS.MIDNIGHT_BLACK} onPress={confirmNumbers}>
                     <Text style={styles.buttonText}>번호 저장</Text>
                 </TouchableHighlight>
             )}

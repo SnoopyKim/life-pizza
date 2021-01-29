@@ -33,3 +33,17 @@ export const numberToModel = (numbers) => ({
     no5: numbers[4],
     no6: numbers[5],
 });
+
+export const ModelToHistory = (model) => {
+    let history = [];
+    model.forEach((item) => {
+        const existing = history.filter((v) => v[0] && v[0].round === item.round);
+        if (existing.length > 0) {
+            const existingIndex = history.indexOf(existing[0]);
+            history[existingIndex] = history[existingIndex].concat(item);
+        } else {
+            history.push([item]);
+        }
+    });
+    return history;
+};

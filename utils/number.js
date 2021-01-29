@@ -20,3 +20,6 @@ export const numberToStringWithCommas = (num) => {
 export const stringToNumberWithoutCommas = (str) => {
     return parseInt(str.replace(/[^0-9]/g, ''), 10);
 };
+
+export const getOnlyNumbersFromObject = (obj) =>
+    (({ no1, no2, no3, no4, no5, no6 }) => ({ no1, no2, no3, no4, no5, no6 }))(obj);
