@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View, TouchableHighlight, FlatList } from 'react-native';
 import Ball, { BallSet } from './Ball';
 import { THEME_COLORS } from '../style/color';
-import { getWinResult } from './../utils/check';
+import { getWinResult, getMatchedNumberArray } from './../utils/check';
+import { updateHistoryData } from '../db';
+import { getOnlyNumbersFromObject } from './../utils/number';
 
 /*
  *  data: {
@@ -27,13 +29,18 @@ export default function HistoryCard({ data }) {
     };
 
     const renderHistoryItem = ({ item }) => {
-        let rank;
-        if (result) {
+        let rank = item.rank;
+        if (!rank && result) {
             rank = getWinResult(result, item);
+            updateHistoryData(item, rank);
         }
+        const uncheck = Object.values(getOnlyNumbersFromObject(item)).filter(
+            (num) => !getMatchedNumberArray(result, item).includes(num)
+        );
+        console.log(uncheck);
         return (
             <View style={{ flexDirection: 'row' }}>
-                <BallSet numbers={item} />
+                <BallSet numbers={item} uncheckList={uncheck} />
                 {result && <Text style={styles.rank}>{rank ? rank + '등' : ' -- '}</Text>}
             </View>
         );
@@ -51,7 +58,7 @@ export default function HistoryCard({ data }) {
                 <FlatList
                     data={history}
                     renderItem={renderHistoryItem}
-                    keyExtractor={(item, index) => item.length + '' + index}
+                    keyExtractor={(item, index) => item.round + '-' + index}
                     ItemSeparatorComponent={() => <View style={styles.seperator} />}
                 />
             </View>

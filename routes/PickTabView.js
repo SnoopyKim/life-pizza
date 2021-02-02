@@ -43,7 +43,9 @@ export default function PickTabView() {
             <Text style={styles.textSelected}>선택한 번호</Text>
             {renderSelectedView()}
             {numbers.length === 6 && (
-                <TouchableHighlight underlayColor={THEME_COLORS.MIDNIGHT_BLACK} onPress={confirmNumbers}>
+                <TouchableHighlight
+                    underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
+                    onPress={confirmNumbers}>
                     <Text style={styles.buttonText}>번호 저장</Text>
                 </TouchableHighlight>
             )}

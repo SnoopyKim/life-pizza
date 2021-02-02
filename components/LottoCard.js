@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View, Easing, TouchableHighlight } from 'react-native';
 import iconSelected from '../images/hand-pointing-left.png';
-import Ball, { BallSet } from './Ball';
+import { CheckedBall, BallSet } from './Ball';
 import { THEME_COLORS } from './../style/color';
 
 export default function LottoCard({ children, data, selected }) {

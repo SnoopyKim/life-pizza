@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Animated, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { THEME_COLORS } from './../style/color';
-import { CheckBall } from './Ball';
+import Ball from './Ball';
 import downIcon from '../images/chevron-down.png';
 
 export default forwardRef(
@@ -75,7 +75,7 @@ export default forwardRef(
                 <View style={styles.numberContainer}>
                     {[...Array(range).keys()].map((num) => (
                         <View key={num + 1} style={styles.item}>
-                            <CheckBall
+                            <Ball
                                 number={num + 1}
                                 size={46}
                                 checked={numberList.indexOf(num + 1) !== -1}
@@ -84,6 +84,7 @@ export default forwardRef(
                                     (numberList.length >= 6 && numberList.indexOf(num + 1) !== -1)
                                 }
                                 onCheck={onPickBall}
+                                animation={true}
                             />
                         </View>
                     ))}

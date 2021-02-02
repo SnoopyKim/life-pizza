@@ -1,6 +1,7 @@
 import { getCurrentRound } from './../modules/api';
 import { getFormattedDate } from './date';
 
+// api응답 데이터를 Realm 모델에 맞춰 재구성
 export const dataToModel = (raw) => ({
     round: raw.round,
     date: raw.date,
@@ -23,6 +24,7 @@ export const dataToModel = (raw) => ({
     fifthWinPrc: raw.fifthWinPrc,
 });
 
+// 저장할 번호를 Realm 모델에 맞춰 재구성
 export const numberToModel = (numbers) => ({
     round: getCurrentRound() + 1,
     date: getFormattedDate(new Date()),
@@ -34,6 +36,7 @@ export const numberToModel = (numbers) => ({
     no6: numbers[5],
 });
 
+// Realm 데이터를 HistoryCard에 맞게 재구성
 export const ModelToHistory = (model) => {
     let history = [];
     model.forEach((item) => {

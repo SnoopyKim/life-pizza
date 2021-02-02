@@ -62,7 +62,9 @@ export default function CreateTabView() {
 
     const renderNumbers = () => {
         return numbers.map((number, idx) => (
-            <Animated.View key={number} style={{ transform: [{ translateY: ballTranslateY[idx] }] }}>
+            <Animated.View
+                key={number}
+                style={{ transform: [{ translateY: ballTranslateY[idx] }] }}>
                 <Ball number={number} />
             </Animated.View>
         ));
@@ -76,7 +78,9 @@ export default function CreateTabView() {
                     style={styles.button}
                     underlayColor={THEME_COLORS.MIDNIGHT_BLACK}
                     onPress={createNumbers}>
-                    <Text style={styles.buttonText}>{isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}</Text>
+                    <Text style={styles.buttonText}>
+                        {isEmptyArray(numbers) ? '번호 생성' : '번호 재생성'}
+                    </Text>
                 </TouchableHighlight>
                 {!isEmptyArray(numbers) && (
                     <TouchableHighlight

@@ -3,7 +3,7 @@ import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { getBallColor } from '../style/color';
 import { THEME_COLORS } from './../style/color';
 
-export default function Ball({ number, size = 32, ...props }) {
+export function CheckedBall({ number, size = 32, ...props }) {
     const getStyleForBox = () => {
         return {
             ...styles.box,
@@ -32,7 +32,7 @@ export function UnCheckedBall({ number, size = 32, ...props }) {
             width: size,
             height: size,
             borderColor: THEME_COLORS.GRAY_400,
-            borderWidth: 3,
+            borderWidth: size / 16,
             borderRadius: size / 2,
             backgroundColor: THEME_COLORS.GRAY_50,
         };
@@ -49,11 +49,12 @@ export function UnCheckedBall({ number, size = 32, ...props }) {
     );
 }
 
-export function CheckBall({
+export default function Ball({
     number,
-    size = 36,
-    checked = false,
-    able = true,
+    size = 32,
+    checked = true,
+    able = false,
+    animation = false,
     onCheck = (number, isChecked) => console.log(number, isChecked),
     ...props
 }) {
@@ -64,12 +65,14 @@ export function CheckBall({
     });
 
     useEffect(() => {
-        transY.setValue(0);
-        Animated.timing(transY, {
-            toValue: 2,
-            duration: 200,
-            useNativeDriver: true,
-        }).start();
+        if (animation) {
+            transY.setValue(0);
+            Animated.timing(transY, {
+                toValue: 2,
+                duration: 200,
+                useNativeDriver: true,
+            }).start();
+        }
     }, [checked, transY]);
 
     const ballProps = {
@@ -79,14 +82,14 @@ export function CheckBall({
     };
     return (
         <Animated.View style={{ transform: [{ translateY: ballTransY }] }}>
-            <TouchableOpacity onPress={() => onCheck(number, !checked)}>
-                {checked ? <Ball {...ballProps} /> : <UnCheckedBall {...ballProps} />}
+            <TouchableOpacity onPress={() => onCheck(number, !checked)} disabled={!able}>
+                {checked ? <CheckedBall {...ballProps} /> : <UnCheckedBall {...ballProps} />}
             </TouchableOpacity>
         </Animated.View>
     );
 }
 
-export function BallSet({ numbers, size = 32, style }) {
+export function BallSet({ numbers, uncheckList = [], size = 32, style }) {
     const { no1, no2, no3, no4, no5, no6, bno } = numbers;
     const getDividingStyle = () => ({
         color: THEME_COLORS.MIDNIGHT_BLACK,
@@ -96,12 +99,12 @@ export function BallSet({ numbers, size = 32, style }) {
     });
     return (
         <View style={[styles.numberView, style]}>
-            <Ball number={no1} size={size} />
-            <Ball number={no2} size={size} />
-            <Ball number={no3} size={size} />
-            <Ball number={no4} size={size} />
-            <Ball number={no5} size={size} />
-            <Ball number={no6} size={size} />
+            <Ball number={no1} size={size} checked={!uncheckList.includes(no1)} />
+            <Ball number={no2} size={size} checked={!uncheckList.includes(no2)} />
+            <Ball number={no3} size={size} checked={!uncheckList.includes(no3)} />
+            <Ball number={no4} size={size} checked={!uncheckList.includes(no4)} />
+            <Ball number={no5} size={size} checked={!uncheckList.includes(no5)} />
+            <Ball number={no6} size={size} checked={!uncheckList.includes(no6)} />
             {bno && <Text style={getDividingStyle()}>+</Text>}
             {bno && <Ball number={bno} size={size} />}
         </View>
