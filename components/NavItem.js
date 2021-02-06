@@ -3,9 +3,9 @@ import { StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import arrowIcon from '../images/chevron-down.png';
 import { THEME_COLORS } from '../style/color';
 
-export default function NavItem({ title = 'NavItem', callback = () => {} }) {
+export default function NavItem({ title = 'NavItem', onPress = () => {} }) {
     return (
-        <TouchableOpacity style={styles.container} onPress={callback}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <Text style={styles.title}>{title}</Text>
             <Image source={arrowIcon} resizeMode="contain" style={styles.icon} />
         </TouchableOpacity>

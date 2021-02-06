@@ -42,6 +42,7 @@ const HistorySchema = {
         no5: 'int',
         no6: 'int',
         rank: { type: 'int', default: 0 },
+        buy: { type: 'bool', default: false },
     },
 };
 
@@ -58,6 +59,7 @@ let realm = new Realm({
 let resultData = realm.objects('Result');
 export const getResultData = () => resultData.sorted('round', true);
 export const getSingleResultData = (round) => realm.objectForPrimaryKey('Result', round);
+export const getResultWithQuery = (query) => resultData.filtered(query);
 export const addResultData = (data) => {
     realm.write(() => {
         realm.create('Result', dataToModel(data));
@@ -77,10 +79,10 @@ export const deleteResultData = (round) => {
 
 let historyData = realm.objects('History');
 export const getHistoryData = () => historyData.sorted('date', true);
-export const getHistoryDataRanked = () => historyData.filtered('rank > 0');
-export const addHistoryData = (data) => {
+export const getHistoryWithQuery = (query) => historyData.filtered(query);
+export const addHistoryData = (numbers, isBuy = false) => {
     realm.write(() => {
-        realm.create('History', numberToModel(data));
+        realm.create('History', numberToModel(numbers, isBuy));
     });
 };
 export const updateHistoryData = (item, rank) => {

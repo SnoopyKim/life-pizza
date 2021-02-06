@@ -37,7 +37,6 @@ export default function HistoryCard({ data }) {
         const uncheck = Object.values(getOnlyNumbersFromObject(item)).filter(
             (num) => !getMatchedNumberArray(result, item).includes(num)
         );
-        console.log(uncheck);
         return (
             <View style={{ flexDirection: 'row' }}>
                 <BallSet numbers={item} uncheckList={uncheck} />

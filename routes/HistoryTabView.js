@@ -1,48 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { isEmptyArray } from './../utils/check';
 import { setLoading } from '../components/Popup';
 import { setAlert } from './../components/Popup/index';
 import { THEME_COLORS } from './../style/color';
-import { getHistoryData, getHistoryDataRanked, getSingleResultData } from '../db';
+import { getHistoryData, getSingleResultData } from '../db';
 import HistoryCard from './../components/HistoryCard';
-import { ModelToHistory } from './../utils/data';
+import { getHistoryBuy, getWinPrice, ModelToHistory, getHistoryDataRanked } from './../utils/data';
 import NavItem from '../components/NavItem';
+import emptyIcon from '../images/search_off.png';
+import { numberToStringWithCommas } from './../utils/number';
 
 export default function HistoryTabView({ navigation }) {
+    const [type, setType] = useState('ALL');
     const [data, setData] = useState([]);
-    const [loaded, setLoaded] = useState(false);
-    const [rankData, setRankData] = useState([]);
 
     useEffect(() => {
-        if (!loaded && isEmptyArray(data)) {
-            setLoading(true);
-            const history = ModelToHistory(getHistoryData());
-            setData(history);
-            setLoaded(true);
+        setLoading(true);
+        if (type === 'EMPTY') {
+            setType('ALL');
+        } else if (type === 'ALL') {
+            setData(getHistoryData());
+        } else if (type === 'BUY') {
+            setData(getHistoryBuy());
+        } else if (type === 'WIN') {
+            setData(getHistoryDataRanked());
         }
-        if (loaded) {
-            setLoading(false);
-        }
-        if (loaded && !isEmptyArray(data)) {
-            console.log(data);
-            setRankData(getHistoryDataRanked());
-        }
-    }, [data, loaded]);
-
-    useEffect(() => {
-        if (isEmptyArray(rankData)) {
-        } else {
-        }
-    }, [rankData]);
+        setLoading(false);
+    }, [type]);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('tabPress', (e) => {
-            setData([]);
-            setLoaded(false);
+            setType('EMPTY');
         });
         return unsubscribe;
     }, [navigation]);
+
+    const renderListHeader = () => {
+        if (type === 'ALL') {
+            return (
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>전체 내역</Text>
+                </View>
+            );
+        } else if (type === 'BUY') {
+            const reducer = (acc, cur) => acc + getWinPrice(cur.round, cur.rank);
+            const totalPrice = data.reduce(reducer, 0) - data.length * 1000;
+            return (
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>구매 내역</Text>
+                    <View style={styles.headerContent}>
+                        <Text>구매 횟수: {data.length}</Text>
+                        <Text>손익 합계: {numberToStringWithCommas(totalPrice)} 원</Text>
+                    </View>
+                </View>
+            );
+        } else if (type === 'WIN') {
+            const reducer = (acc, cur) => acc + getWinPrice(cur.round, cur.rank);
+            const totalPrice = data.reduce(reducer, 0);
+            return (
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>당첨 내역</Text>
+                    <View style={styles.headerContent}>
+                        <Text>당첨 횟수: {data.length}</Text>
+                        <Text>당첨 금액 합: {numberToStringWithCommas(totalPrice)} 원</Text>
+                    </View>
+                </View>
+            );
+        }
+    };
 
     const renderCard = ({ item }) => (
         <HistoryCard data={{ result: getSingleResultData(item[0].round), history: item }} />
@@ -51,14 +77,20 @@ export default function HistoryTabView({ navigation }) {
     return (
         <View style={styles.screen}>
             <View style={styles.navContainer}>
-                <NavItem title={'전체 내역 보기'} />
-                <NavItem title={'구매 내역 보기'} />
-                <NavItem title={'당첨 내역 보기'} />
+                <NavItem title={'전체 내역 보기'} onPress={() => setType('ALL')} />
+                <NavItem title={'구매 내역 보기'} onPress={() => setType('BUY')} />
+                <NavItem title={'당첨 내역 보기'} onPress={() => setType('WIN')} />
             </View>
             <View style={styles.listContainer}>
-                {data.length > 0 && (
+                {renderListHeader()}
+                {isEmptyArray(ModelToHistory(data)) ? (
+                    <View style={styles.emptyContainer}>
+                        <Image source={emptyIcon} style={styles.emptyIcon} />
+                        <Text style={styles.emptyText}>해당 내역이 없습니다</Text>
+                    </View>
+                ) : (
                     <FlatList
-                        data={data}
+                        data={ModelToHistory(data)}
                         renderItem={renderCard}
                         keyExtractor={(item, index) => item[0].round.toString() + index}
                         initialNumToRender={10}
@@ -91,14 +123,36 @@ const styles = StyleSheet.create({
         borderTopEndRadius: 30,
     },
     scrollView: {
-        paddingVertical: 10,
+        paddingBottom: 10,
     },
-    link: {
-        alignSelf: 'flex-end',
+    header: {
+        marginBottom: 10,
     },
-    textLink: {
-        fontSize: 14,
-        textDecorationLine: 'underline',
+    headerTitle: {
+        alignSelf: 'center',
+        color: THEME_COLORS.GRAY_700,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    headerContent: {
+        marginTop: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyIcon: {
+        width: 50,
+        height: 50,
+        tintColor: THEME_COLORS.GRAY_500,
+    },
+    emptyText: {
         color: THEME_COLORS.GRAY_500,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 5,
     },
 });

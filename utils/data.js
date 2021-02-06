@@ -1,3 +1,4 @@
+import { getHistoryWithQuery, getSingleResultData } from '../db';
 import { getCurrentRound } from './../modules/api';
 import { getFormattedDate } from './date';
 
@@ -25,7 +26,7 @@ export const dataToModel = (raw) => ({
 });
 
 // 저장할 번호를 Realm 모델에 맞춰 재구성
-export const numberToModel = (numbers) => ({
+export const numberToModel = (numbers, isBuy) => ({
     round: getCurrentRound() + 1,
     date: getFormattedDate(new Date()),
     no1: numbers[0],
@@ -34,6 +35,7 @@ export const numberToModel = (numbers) => ({
     no4: numbers[3],
     no5: numbers[4],
     no6: numbers[5],
+    buy: isBuy,
 });
 
 // Realm 데이터를 HistoryCard에 맞게 재구성
@@ -49,4 +51,23 @@ export const ModelToHistory = (model) => {
         }
     });
     return history;
+};
+
+export const getHistoryBuy = () => getHistoryWithQuery('buy == true');
+export const getHistoryDataRanked = () => getHistoryWithQuery('rank > 0');
+export const getWinPrice = (round, rank) => {
+    const result = getSingleResultData(round);
+    if (rank === 1) {
+        return result.firstWinPrc;
+    } else if (rank === 2) {
+        return result.secondWinPrc;
+    } else if (rank === 2) {
+        return result.thirdWinPrc;
+    } else if (rank === 2) {
+        return result.fourthWinPrc;
+    } else if (rank === 2) {
+        return result.fifthWinPrc;
+    } else {
+        return 0;
+    }
 };
